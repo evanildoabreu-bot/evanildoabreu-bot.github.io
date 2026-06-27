@@ -856,7 +856,7 @@
       4. Substitua "YOUR_FORM_ID" abaixo pelo ID copiado
       Exemplo: action="https://formspree.io/f/xpznkbwq"
     -->
-    <form id="lead-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <form id="lead-form" action="https://formspree.io/f/mkolrlvk" method="POST">
       <input type="hidden" name="_subject" value="Novo Diagnóstico Financeiro — EA Abreu"/>
       <input type="hidden" name="_replyto" value="evanildoabreu@hotmail.com"/>
 
@@ -1093,12 +1093,6 @@
     e.preventDefault();
     const data = new FormData(form);
     const action = form.getAttribute('action');
-
-    // Se ainda não configurou o Formspree, mostra aviso
-    if (action.includes('YOUR_FORM_ID')) {
-      alert('⚠️ Configure o Formspree: substitua YOUR_FORM_ID no código HTML pelo ID do seu formulário em formspree.io');
-      return;
-    }
 
     try {
       const res = await fetch(action, {
