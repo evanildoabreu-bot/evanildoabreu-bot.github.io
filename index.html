@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EA Abreu · Diagnóstico Financeiro Gratuito</title>
+  <style>
+    :root {
+      --navy: #05101f;
+      --navy2: #0a1a30;
+      --navy3: #0f2340;
+      --gold: #c9a84c;
+      --gold2: #e8c96d;
+      --gold3: #f5e09a;
+      --white: #f0f4f8;
+      --muted: #94a3b8;
+      --border: #1a2d45;
+      --green: #22c55e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+
+    /* ── NAV ─────────────────────────────── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(5,16,31,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 800; color: var(--gold); letter-spacing: .04em; }
+    .nav-logo span { color: var(--white); }
+    .nav-cta {
+      background: var(--gold); color: #05101f;
+      padding: .45rem 1.1rem; border-radius: 6px;
+      font-size: .85rem; font-weight: 700; transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--gold2); }
+
+    /* ── HERO ────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 100px 5% 60px;
+      text-align: center;
+    }
+
+    /* Animated trading-screen background */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, #001229 0%, #051830 40%, #020d1c 100%);
+      z-index: 0;
+    }
+
+    /* Ticker lines overlay */
+    .hero-bg-grid {
+      position: absolute; inset: 0; z-index: 1;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,.06) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,168,76,.04) 80px);
+    }
+
+    /* Glowing orbs */
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,.12) 0%, transparent 70%);
+      top: -100px; right: -150px; z-index: 1;
+    }
+
+    /* Floating ticker bar */
+    .ticker-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,.5);
+      border-top: 1px solid var(--border);
+      overflow: hidden; height: 36px; z-index: 5;
+    }
+    .ticker-inner {
+      display: flex; align-items: center; gap: 2.5rem;
+      animation: ticker 28s linear infinite;
+      white-space: nowrap; height: 100%;
+      padding: 0 1rem;
+    }
+    .ticker-item { font-size: .75rem; font-weight: 600; color: var(--muted); }
+    .ticker-item .up { color: #22c55e; }
+    .ticker-item .dn { color: #ef4444; }
+    @keyframes ticker { 0%{ transform: translateX(0) } 100%{ transform: translateX(-50%) } }
+
+    .hero-content { position: relative; z-index: 10; max-width: 800px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(201,168,76,.12);
+      border: 1px solid rgba(201,168,76,.3);
+      color: var(--gold2); font-size: .78rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .35rem 1rem; border-radius: 999px; margin-bottom: 1.6rem;
+    }
+    .badge-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%;
+      animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:.4 } }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900; line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      color: var(--muted); max-width: 620px; margin: 0 auto 2.2rem;
+    }
+    .hero-sub strong { color: var(--white); }
+
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-gold {
+      background: var(--gold); color: #05101f;
+      padding: .85rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 800;
+      transition: all .2s; box-shadow: 0 0 24px rgba(201,168,76,.35);
+    }
+    .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 0 32px rgba(201,168,76,.5); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--muted);
+      padding: .85rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 600; transition: all .2s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-trust {
+      margin-top: 2rem; font-size: .8rem; color: var(--muted);
+      display: flex; align-items: center; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .hero-trust span { display: flex; align-items: center; gap: .35rem; }
+
+    /* ── PAIN SECTION ────────────────────── */
+    .pain {
+      background: var(--navy2);
+      padding: 80px 5%;
+      text-align: center;
+    }
+    .section-tag {
+      color: var(--gold); font-size: .75rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: .7rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800; margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--muted); max-width: 560px; margin: 0 auto 3rem; font-size: .97rem; }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem; max-width: 960px; margin: 0 auto;
+    }
+    .pain-card {
+      background: var(--navy3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem; text-align: left;
+      transition: border-color .2s, transform .2s;
+    }
+    .pain-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .pain-icon { font-size: 1.5rem; margin-bottom: .7rem; }
+    .pain-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+    .pain-card p { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── ABOUT ───────────────────────────── */
+    .about {
+      padding: 80px 5%;
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .about-photos {
+      position: relative;
+    }
+    .photo-main {
+      width: 100%; border-radius: 16px;
+      border: 2px solid var(--border);
+      object-fit: cover; aspect-ratio: 4/5;
+      background: var(--navy3);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .photo-main img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-badge-img {
+      position: absolute; bottom: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 12px;
+      border: 3px solid var(--gold);
+      background: var(--navy2);
+      overflow: hidden;
+    }
+    .photo-badge-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Placeholder for missing photos */
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .5rem; color: var(--muted); font-size: .85rem;
+      background: var(--navy3);
+      border-radius: 14px;
+    }
+    .photo-placeholder-icon { font-size: 3rem; }
+
+    .about-text .section-tag { text-align: left; }
+    .about-text .section-title { text-align: left; }
+    .about-text p { color: var(--muted); margin-bottom: .9rem; font-size: .95rem; }
+    .about-text p strong { color: var(--white); }
+    .cred-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-top: 1.2rem; }
+    .cred-list li {
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .88rem; color: var(--white); font-weight: 600;
+    }
+    .cred-list li::before {
+      content: '✓'; width: 22px; height: 22px;
+      background: rgba(34,197,94,.15); color: var(--green);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: .75rem; font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* ── SERVICES ────────────────────────── */
+    .services {
+      background: var(--navy2);
+      padding: 80px 5%;
+      text-align: center;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.2rem; max-width: 1000px; margin: 0 auto;
+    }
+    .service-card {
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 2rem 1.5rem;
+      text-align: left; transition: all .25s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .service-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .service-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .service-card p { font-size: .83rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── FORM ────────────────────────────── */
+    .form-section {
+      padding: 80px 5%;
+      background: var(--navy3);
+    }
+    .form-wrapper {
+      max-width: 680px; margin: 0 auto;
+    }
+    .form-wrapper .section-title { text-align: center; }
+    .form-wrapper .section-sub { text-align: center; margin-bottom: 2.5rem; }
+
+    .free-badge {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3);
+      color: var(--green); font-size: .8rem; font-weight: 700;
+      padding: .3rem .9rem; border-radius: 999px; margin-bottom: 1.2rem;
+    }
+
+    form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .82rem; font-weight: 600; color: var(--muted); }
+    .form-group input,
+    .form-group select {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      font-size: .95rem;
+      padding: .8rem 1rem;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .form-group input::placeholder { color: #475569; }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--gold); }
+    .form-group select option { background: var(--navy2); }
+
+    .form-submit {
+      width: 100%;
+      background: var(--gold); color: #05101f;
+      border: none; border-radius: 8px;
+      font-size: 1.05rem; font-weight: 800;
+      padding: 1rem; cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 0 24px rgba(201,168,76,.3);
+      margin-top: .5rem;
+    }
+    .form-submit:hover { background: var(--gold2); transform: translateY(-1px); box-shadow: 0 0 32px rgba(201,168,76,.5); }
+
+    .form-disclaimer {
+      font-size: .75rem; color: #475569;
+      text-align: center; margin-top: .5rem;
+    }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      text-align: center; padding: 3rem 1rem;
+    }
+    .form-success .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .form-success h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: .5rem; }
+    .form-success p { color: var(--muted); }
+
+    /* ── FAQ ─────────────────────────────── */
+    .faq-section { padding: 80px 5%; }
+    .faq-wrapper { max-width: 760px; margin: 0 auto; }
+    .faq-wrapper .section-title { text-align: center; }
+    .faq-wrapper .section-sub { text-align: center; }
+
+    .faq-list { display: flex; flex-direction: column; gap: .7rem; margin-top: 2.5rem; }
+
+    .faq-item {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .faq-item.open { border-color: rgba(201,168,76,.4); }
+
+    .faq-question {
+      width: 100%; background: none; border: none;
+      color: var(--white); text-align: left;
+      padding: 1.15rem 1.4rem;
+      font-size: .95rem; font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      transition: color .2s;
+    }
+    .faq-item.open .faq-question { color: var(--gold2); }
+
+    .faq-chevron {
+      width: 22px; height: 22px; flex-shrink: 0;
+      background: rgba(201,168,76,.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; transition: transform .3s, background .2s;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); background: rgba(201,168,76,.2); }
+
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease, padding .3s;
+      padding: 0 1.4rem;
+    }
+    .faq-item.open .faq-answer { max-height: 600px; padding: 0 1.4rem 1.2rem; }
+    .faq-answer p { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+    .faq-answer p + p { margin-top: .6rem; }
+
+    /* ── FINAL CTA ───────────────────────── */
+    .final-cta {
+      background: linear-gradient(135deg, #0a1827 0%, #0f2340 100%);
+      border-top: 1px solid var(--border);
+      padding: 80px 5%;
+      text-align: center;
+    }
+    .final-cta h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; margin-bottom: 1rem; }
+    .final-cta h2 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--gold), var(--gold3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .final-cta p { color: var(--muted); max-width: 520px; margin: 0 auto 2rem; }
+
+    /* ── PHOTO SETUP PANEL ───────────────── */
+    #setup-btn {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+      background: var(--gold); color: #05101f;
+      border: none; border-radius: 50px;
+      padding: .7rem 1.3rem; font-size: .85rem; font-weight: 800;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(201,168,76,.4);
+      display: flex; align-items: center; gap: .5rem;
+      transition: all .2s;
+    }
+    #setup-btn:hover { background: var(--gold2); transform: translateY(-2px); }
+
+    #setup-modal {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    #setup-modal.open { display: flex; }
+    .setup-box {
+      background: var(--navy2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; width: 100%; max-width: 500px;
+      position: relative;
+    }
+    .setup-box h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: .4rem; }
+    .setup-box p { color: var(--muted); font-size: .85rem; margin-bottom: 1.5rem; }
+    .setup-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.3rem; cursor: pointer; line-height: 1;
+    }
+    .photo-slot {
+      background: var(--navy3); border: 2px dashed var(--border);
+      border-radius: 12px; padding: 1rem 1.2rem;
+      margin-bottom: .8rem; cursor: pointer;
+      transition: border-color .2s;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .photo-slot:hover { border-color: var(--gold); }
+    .photo-slot.done { border-color: var(--green); border-style: solid; }
+    .slot-thumb {
+      width: 56px; height: 56px; border-radius: 8px;
+      object-fit: cover; background: var(--navy); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--muted);
+    }
+    .slot-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+    .slot-info { flex: 1; }
+    .slot-label { font-size: .85rem; font-weight: 700; }
+    .slot-hint { font-size: .75rem; color: var(--muted); margin-top: .15rem; }
+    .slot-check { font-size: 1.2rem; }
+    .setup-download {
+      width: 100%; background: var(--gold); color: #05101f;
+      border: none; border-radius: 8px; padding: .85rem;
+      font-size: .95rem; font-weight: 800; cursor: pointer;
+      margin-top: 1rem; transition: background .2s;
+    }
+    .setup-download:hover { background: var(--gold2); }
+    .setup-note { font-size: .72rem; color: #475569; text-align: center; margin-top: .7rem; }
+
+    /* ── FOOTER ──────────────────────────── */
+    footer {
+      background: #020c18;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 5%;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand { font-weight: 700; color: var(--gold); font-size: .95rem; }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); font-size: .82rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-note { font-size: .72rem; color: #334155; width: 100%; text-align: center; }
+
+    /* ── TIMELINE ────────────────────────── */
+    .timeline-section {
+      padding: 80px 5%;
+      background: var(--navy2);
+    }
+    .timeline-wrapper { max-width: 860px; margin: 0 auto; }
+    .timeline { position: relative; padding-left: 2rem; margin-top: 2.5rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 7px; top: 6px; bottom: 6px;
+      width: 2px; background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+    .tl-item { position: relative; margin-bottom: 2rem; }
+    .tl-dot {
+      position: absolute; left: -2rem;
+      width: 16px; height: 16px;
+      background: var(--gold); border-radius: 50%;
+      border: 3px solid var(--navy2);
+      top: 4px;
+    }
+    .tl-item:first-child .tl-dot { background: var(--green); box-shadow: 0 0 10px rgba(34,197,94,.5); }
+    .tl-period { font-size: .75rem; color: var(--gold); font-weight: 700; letter-spacing: .06em; margin-bottom: .25rem; }
+    .tl-company { font-size: .8rem; color: var(--muted); margin-bottom: .15rem; }
+    .tl-role { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .tl-desc { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+    .tl-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem; }
+    .tl-tag {
+      background: rgba(201,168,76,.1); color: var(--gold2);
+      border: 1px solid rgba(201,168,76,.2);
+      border-radius: 4px; padding: .15rem .6rem; font-size: .72rem; font-weight: 600;
+    }
+
+    /* ── SOCIAL PROOF STRIP ──────────────── */
+    .proof-strip {
+      background: var(--navy3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 5%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 3rem; flex-wrap: wrap;
+    }
+    .proof-item {
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .88rem;
+    }
+    .proof-num { font-size: 1.5rem; font-weight: 900; color: var(--gold); }
+    .proof-label { color: var(--muted); font-size: .78rem; line-height: 1.3; }
+
+    /* ── RESPONSIVE ──────────────────────── */
+    @media (max-width: 768px) {
+      .about {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .photo-badge-img { right: 10px; bottom: -10px; width: 100px; height: 100px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+      .proof-strip { gap: 1.5rem; }
+      .timeline { padding-left: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────── -->
+<nav>
+  <div class="nav-logo">EA<span> Abreu</span></div>
+  <a href="#diagnostico" class="nav-cta">Diagnóstico Gratuito</a>
+</nav>
+
+<!-- ── HERO ──────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Consultor CVM · Instrução 592 · CEA Anbima
+    </div>
+    <h1>
+      Seu dinheiro merece<br/>
+      <em>trabalhar por você.</em>
+    </h1>
+    <p class="hero-sub">
+      Ajudamos pessoas e famílias a <strong>organizar, proteger e expandir seu patrimônio</strong>
+      com método, clareza e visão de longo prazo —
+      sem gestão de recursos e sem conflito de interesses.
+    </p>
+    <div class="hero-btns">
+      <a href="#diagnostico" class="btn-gold">🎯 Quero meu diagnóstico gratuito</a>
+      <a href="#sobre" class="btn-ghost">Conheça o consultor</a>
+    </div>
+    <div class="hero-trust">
+      <span>✅ 100% gratuito</span>
+      <span>🔒 Sem compromisso</span>
+      <span>⚖️ Regulado pela CVM</span>
+      <span>🏦 +20 anos de experiência</span>
+    </div>
+  </div>
+  <div class="ticker-bar">
+    <div class="ticker-inner">
+      <span class="ticker-item">PETR4 <span class="up">▲ 1,42%</span></span>
+      <span class="ticker-item">VALE3 <span class="dn">▼ 0,38%</span></span>
+      <span class="ticker-item">ITUB4 <span class="up">▲ 0,91%</span></span>
+      <span class="ticker-item">BBDC4 <span class="dn">▼ 0,20%</span></span>
+      <span class="ticker-item">SELIC <span class="up">13,75% a.a.</span></span>
+      <span class="ticker-item">IBOV <span class="up">▲ 0,61%</span></span>
+      <span class="ticker-item">USD/BRL <span class="up">R$ 5,87</span></span>
+      <span class="ticker-item">IPCA <span class="muted">4,82% a.a.</span></span>
+      <span class="ticker-item">KLBN4 <span class="dn">▼ 0,20%</span></span>
+      <span class="ticker-item">LAME4 <span class="dn">▼ 0,40%</span></span>
+      <!-- repeat for seamless loop -->
+      <span class="ticker-item">PETR4 <span class="up">▲ 1,42%</span></span>
+      <span class="ticker-item">VALE3 <span class="dn">▼ 0,38%</span></span>
+      <span class="ticker-item">ITUB4 <span class="up">▲ 0,91%</span></span>
+      <span class="ticker-item">BBDC4 <span class="dn">▼ 0,20%</span></span>
+      <span class="ticker-item">SELIC <span class="up">13,75% a.a.</span></span>
+      <span class="ticker-item">IBOV <span class="up">▲ 0,61%</span></span>
+      <span class="ticker-item">USD/BRL <span class="up">R$ 5,87</span></span>
+      <span class="ticker-item">IPCA <span class="muted">4,82% a.a.</span></span>
+      <span class="ticker-item">KLBN4 <span class="dn">▼ 0,20%</span></span>
+      <span class="ticker-item">LAME4 <span class="dn">▼ 0,40%</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF STRIP ─────────────────── -->
+<div class="proof-strip">
+  <div class="proof-item">
+    <div class="proof-num">20+</div>
+    <div class="proof-label">Anos de experiência<br/>no mercado financeiro</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">3</div>
+    <div class="proof-label">Grandes instituições<br/>Itaú · Santander · CVM</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">CVM</div>
+    <div class="proof-label">Registrado e regulado<br/>Instrução CVM 592</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">CEA</div>
+    <div class="proof-label">Certificação Anbima<br/>Especialista em Assessoria</div>
+  </div>
+</div>
+
+<!-- ── PAIN POINTS ────────────────────────── -->
+<section class="pain">
+  <p class="section-tag">Você se identifica?</p>
+  <h2 class="section-title">Situações que fazem seu dinheiro perder força</h2>
+  <p class="section-sub">Se você já viveu algum desses momentos, o diagnóstico financeiro foi feito para você.</p>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">😟</div>
+      <h3>Dinheiro parado ou na poupança</h3>
+      <p>Seu dinheiro deveria trabalhar por você. Poupança paga menos que a inflação e corrói seu poder de compra.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🤷</div>
+      <h3>Não sabe onde ou como investir</h3>
+      <p>Excesso de opções, informação contraditória e medo de errar travam quem poderia estar crescendo patrimônio.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">📉</div>
+      <h3>Investe sem estratégia clara</h3>
+      <p>Compra ativos na emoção, sem plano de alocação alinhado ao seu perfil e objetivos de vida.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🕰️</div>
+      <h3>Preocupação com o futuro</h3>
+      <p>Medo de não ter renda suficiente na aposentadoria ou de depender apenas do INSS.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────── -->
+<section id="sobre">
+  <div class="about">
+    <div class="about-photos">
+      <div class="photo-main">
+        <div class="photo-placeholder" id="slot-main-ph">
+          <span class="photo-placeholder-icon">📸</span>
+          <span style="font-weight:700">Foto na B3</span>
+          <small style="font-size:.72rem;text-align:center;padding:0 1rem;color:var(--muted)">
+            Clique no botão ⚙️ Fotos para adicionar
+          </small>
+        </div>
+        <img id="slot-main-img" src="" alt="Evanildo Abreu na B3"
+          style="display:none;width:100%;height:100%;object-fit:cover;border-radius:14px"/>
+      </div>
+      <div class="photo-badge-img">
+        <div class="photo-placeholder" id="slot-badge-ph" style="border-radius:10px">
+          <span style="font-size:1.8rem">📸</span>
+        </div>
+        <img id="slot-badge-img" src="" alt="Evanildo Abreu"
+          style="display:none;width:100%;height:100%;object-fit:cover;border-radius:9px"/>
+      </div>
+    </div>
+
+    <div class="about-text">
+      <p class="section-tag">Sobre o Consultor</p>
+      <h2 class="section-title">Evanildo<br/>Alves de Abreu</h2>
+      <p>
+        Profissional sênior com <strong>mais de 20 anos de experiência</strong> em Gestão Comercial,
+        Administração e Mercado Financeiro. Graduado em Administração de Empresas com
+        <strong>MBA em Gestão Comercial pela FGV</strong>.
+      </p>
+      <p>
+        Atuo como <strong>Consultor Financeiro registrado na CVM</strong>, seguindo a Instrução 592 —
+        que garante atuação independente, sem conflito de interesses e focada exclusivamente
+        na orientação e proteção dos meus clientes.
+      </p>
+      <p>
+        Minha missão é <strong>transformar decisões financeiras em um processo estruturado</strong>,
+        alinhado aos seus objetivos de vida, com clareza e método.
+      </p>
+      <ul class="cred-list">
+        <li>Registro oficial como Consultor de Investimentos CVM (Inst. 592)</li>
+        <li>Certificação CEA — Anbima</li>
+        <li>MBA em Gestão Comercial — FGV</li>
+        <li>+8 anos em Itaú Unibanco (Advisor, Gerente EMP/Digital, Empresas)</li>
+        <li>Consultoria em Santander — Alta Renda & Private</li>
+        <li>Consultoria independente — sem gestão de recursos</li>
+      </ul>
+      <div style="margin-top:1.5rem">
+        <a href="https://www.linkedin.com/in/evanildoabreu/" target="_blank"
+           style="display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--muted);border:1px solid var(--border);padding:.5rem 1.1rem;border-radius:8px;transition:all .2s"
+           onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+           onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+          🔗 Ver perfil completo no LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIMELINE ────────────────────────────── -->
+<section class="timeline-section">
+  <div class="timeline-wrapper">
+    <p class="section-tag" style="text-align:center">Trajetória Profissional</p>
+    <h2 class="section-title" style="text-align:center">+20 Anos no Mercado Financeiro</h2>
+    <p class="section-sub" style="text-align:center;margin-bottom:0">Uma trajetória construída com método, dedicação e resultados comprovados.</p>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">out 2024 – presente · Presencial</div>
+        <div class="tl-company">🏦 Itaú Unibanco</div>
+        <div class="tl-role">Advisor Patrimonial · Alta Performance</div>
+        <p class="tl-desc">Atuação estratégica em assessoria de alta performance — gestão consultiva de patrimônio, inteligência de alocação de ativos e blindagem patrimonial. Avaliação de crédito privado (Debêntures, CRI, CRA), análise de fundos, rebalanceamento tático de carteiras e captação qualificada (New Money).</p>
+        <div class="tl-tags">
+          <span class="tl-tag">Advisory</span>
+          <span class="tl-tag">Alocação de Ativos</span>
+          <span class="tl-tag">Crédito Privado</span>
+          <span class="tl-tag">Rebalanceamento</span>
+          <span class="tl-tag">New Money</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--gold2)"></div>
+        <div class="tl-period">jan 2023 – presente · Remoto · São Paulo</div>
+        <div class="tl-company">🏛️ Comissão de Valores Mobiliários (CVM)</div>
+        <div class="tl-role">Consultor Financeiro Registrado — Instrução CVM 592</div>
+        <p class="tl-desc">Registro ativo como Consultor de Investimentos nos termos da Instrução CVM 592 — atuação independente na prestação de serviços de orientação financeira, sem gestão de recursos de terceiros e sem conflito de interesses.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">CVM 592</span>
+          <span class="tl-tag">Consultoria Independente</span>
+          <span class="tl-tag">Planejamento Patrimonial</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#475569"></div>
+        <div class="tl-period">jan 2023 – fev 2024 · 1 ano 2 meses · Remoto</div>
+        <div class="tl-company">🏦 Santander Brasil</div>
+        <div class="tl-role">Consultor de Investimentos · Alta Renda & Private</div>
+        <p class="tl-desc">Direcionamento estratégico e inteligência de alocação de ativos para clientes de Alta Renda e Private. Elaboração de análises comparativas de portfólios externos, identificação de assimetrias e oportunidades. Análise macroeconômica aplicada e prospecção de novos recursos.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">Alta Renda</span>
+          <span class="tl-tag">Private Banking</span>
+          <span class="tl-tag">Análise de Portfólio</span>
+          <span class="tl-tag">Macroeconomia</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#475569"></div>
+        <div class="tl-period">out 2016 – out 2022 · 6 anos 1 mês · Américo Brasiliense, SP</div>
+        <div class="tl-company">🏦 Itaú Unibanco</div>
+        <div class="tl-role">Gerente Líbero de Relacionamento EMP/DIGITAL</div>
+        <p class="tl-desc">Atuação estratégica como braço direito e backup do Gerente Geral na Agência Digital — liderança por influência, governança, formação de lideranças e entrega de resultados comerciais. Gestão de equipes comerciais e desenvolvimento de lideranças em ambiente corporativo de alta pressão.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">Gestão de Equipes</span>
+          <span class="tl-tag">Liderança</span>
+          <span class="tl-tag">Agência Digital</span>
+          <span class="tl-tag">Resultados Comerciais</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#475569"></div>
+        <div class="tl-period">out 2014 – out 2016 · 2 anos 1 mês · Vitória Brasil, SP</div>
+        <div class="tl-company">🏦 Itaú Unibanco</div>
+        <div class="tl-role">Gerente de Relacionamento Empresas</div>
+        <p class="tl-desc">Gestão e administração de carteira com 1.200 clientes PJ com faturamento de até R$ 8 milhões/ano. Atendimento consultivo na oferta de produtos e serviços, com foco em crescimento da base e relacionamento de longo prazo.</p>
+        <div class="tl-tags">
+          <span class="tl-tag">Carteira PJ</span>
+          <span class="tl-tag">CRM</span>
+          <span class="tl-tag">Relacionamento B2B</span>
+          <span class="tl-tag">Gestão de Portfólio</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:2rem">
+      <a href="https://www.linkedin.com/in/evanildoabreu/" target="_blank" class="btn-ghost" style="display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.6rem">
+        🔗 Ver perfil completo no LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ───────────────────────────── -->
+<section class="services">
+  <p class="section-tag">O que oferecemos</p>
+  <h2 class="section-title">Nossos Serviços</h2>
+  <p class="section-sub">Uma abordagem completa para você construir e proteger seu patrimônio.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🗺️</div>
+      <h3>Diagnóstico Financeiro</h3>
+      <p>Análise completa da sua situação atual — dívidas, gastos, investimentos e objetivos — para identificar onde você está e traçar o caminho ideal.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Planejamento Patrimonial</h3>
+      <p>Estratégia personalizada de alocação de ativos alinhada ao seu perfil de risco, horizonte de tempo e metas de curto, médio e longo prazo.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📈</div>
+      <h3>Orientação em Investimentos</h3>
+      <p>Orientação clara sobre Renda Fixa, Renda Variável, Derivativos e outros instrumentos — sempre seguindo seu perfil e sem conflito de interesses.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛡️</div>
+      <h3>Blindagem Patrimonial</h3>
+      <p>Revisão e auditoria de portfólios existentes em outras instituições com relatórios focados em eficiência e proteção do seu capital.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎓</div>
+      <h3>Educação Financeira</h3>
+      <p>Você aprende a entender cada decisão financeira, ganhando autonomia e confiança para investir com consciência no longo prazo.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤝</div>
+      <h3>Acompanhamento Contínuo</h3>
+      <p>Revisões periódicas do plano financeiro, rebalanceamento de portfólio e suporte contínuo para capturar oportunidades e mitigar riscos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FORM ───────────────────────────────── -->
+<section class="form-section" id="diagnostico">
+  <div class="form-wrapper">
+    <div style="text-align:center">
+      <div class="free-badge">✅ 100% Gratuito · Sem compromisso</div>
+    </div>
+    <h2 class="section-title">Solicite seu<br/>Diagnóstico Financeiro</h2>
+    <p class="section-sub">
+      Preencha o formulário e entraremos em contato para agendar sua avaliação gratuita.
+    </p>
+
+    <!--
+      INSTRUÇÕES PARA ATIVAR O ENVIO DE E-MAIL:
+      1. Acesse https://formspree.io e crie uma conta gratuita
+      2. Crie um novo formulário com o e-mail: evanildoabreu@hotmail.com
+      3. Copie o ID do formulário (ex: xpznkbwq)
+      4. Substitua "YOUR_FORM_ID" abaixo pelo ID copiado
+      Exemplo: action="https://formspree.io/f/xpznkbwq"
+    -->
+    <form id="lead-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="hidden" name="_subject" value="Novo Diagnóstico Financeiro — EA Abreu"/>
+      <input type="hidden" name="_replyto" value="evanildoabreu@hotmail.com"/>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nome">Nome completo *</label>
+          <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required/>
+        </div>
+        <div class="form-group">
+          <label for="profissao">Profissão *</label>
+          <input type="text" id="profissao" name="profissao" placeholder="Ex: Médico, Engenheiro..." required/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input type="email" id="email" name="email" placeholder="seu@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label for="telefone">WhatsApp / Telefone *</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="valor">Valor que deseja começar a investir</label>
+        <select id="valor" name="valor_investimento">
+          <option value="" disabled selected>Selecione uma faixa</option>
+          <option>Até R$ 5.000</option>
+          <option>R$ 5.000 – R$ 20.000</option>
+          <option>R$ 20.000 – R$ 50.000</option>
+          <option>R$ 50.000 – R$ 200.000</option>
+          <option>R$ 200.000 – R$ 500.000</option>
+          <option>Acima de R$ 500.000</option>
+          <option>Prefiro não informar</option>
+        </select>
+      </div>
+
+      <button type="submit" class="form-submit">
+        🎯 Quero meu diagnóstico gratuito →
+      </button>
+      <p class="form-disclaimer">
+        🔒 Seus dados estão protegidos. Não fazemos spam nem compartilhamos suas informações.
+        <br/>Atuamos em conformidade com a LGPD e a Instrução CVM 592.
+      </p>
+    </form>
+
+    <div class="form-success" id="form-success">
+      <div class="success-icon">🎉</div>
+      <h3>Solicitação enviada com sucesso!</h3>
+      <p>Entraremos em contato em breve para agendar seu diagnóstico financeiro gratuito.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── AWARDS ─────────────────────────────── -->
+<section style="padding:80px 5%;background:var(--navy2)">
+  <div style="max-width:1000px;margin:0 auto">
+    <p class="section-tag" style="text-align:center">Reconhecimento</p>
+    <h2 class="section-title" style="text-align:center">Resultados que Falam por Si</h2>
+    <p class="section-sub" style="text-align:center">Premiações e conquistas ao longo de mais de 20 anos no mercado financeiro.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem">
+
+      <!-- Award photo -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid var(--border);aspect-ratio:4/3;background:var(--navy3);display:flex;align-items:center;justify-content:center;position:relative">
+        <div class="photo-placeholder" id="slot-award-ph" style="border-radius:0">
+          <span class="photo-placeholder-icon">🏆</span>
+          <span style="font-weight:700">Premiação Itaú — 1° Lugar</span>
+          <small style="color:var(--muted);font-size:.72rem;padding:0 1rem;text-align:center">Clique em ⚙️ Fotos para adicionar</small>
+        </div>
+        <img id="slot-award-img" src="" alt="Premiação Itaú 1° Lugar"
+          style="display:none;width:100%;height:100%;object-fit:cover"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:1.2rem 1rem">
+          <div style="color:var(--gold);font-weight:800;font-size:.95rem">🏆 1° Lugar Nacional — Itaú Unibanco</div>
+          <div style="color:var(--muted);font-size:.8rem">Reconhecimento de performance em assessoria de alta performance</div>
+        </div>
+      </div>
+
+      <!-- Team photo -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid var(--border);aspect-ratio:4/3;background:var(--navy3);display:flex;align-items:center;justify-content:center;position:relative">
+        <div class="photo-placeholder" id="slot-team-ph" style="border-radius:0">
+          <span class="photo-placeholder-icon">👥</span>
+          <span style="font-weight:700">Foto de Equipe</span>
+          <small style="color:var(--muted);font-size:.72rem;padding:0 1rem;text-align:center">Clique em ⚙️ Fotos para adicionar</small>
+        </div>
+        <img id="slot-team-img" src="" alt="Equipe EA Abreu"
+          style="display:none;width:100%;height:100%;object-fit:cover"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:1.2rem 1rem">
+          <div style="color:var(--gold);font-weight:800;font-size:.95rem">👥 Liderança & Equipe</div>
+          <div style="color:var(--muted);font-size:.8rem">Formação e mentoria de equipes comerciais de alta performance</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────── -->
+<section class="faq-section">
+  <div class="faq-wrapper">
+    <p class="section-tag">Dúvidas Frequentes</p>
+    <h2 class="section-title">Perguntas & Respostas</h2>
+    <p class="section-sub">Tudo que você precisa saber antes de começar.</p>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          O diagnóstico financeiro é gratuito?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim, o primeiro contato é totalmente gratuito. Nossa missão é ajudar você a entender sua situação atual e traçar o melhor caminho — sem custo inicial e sem compromisso.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Vou ter ganhos extraordinários?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Orientamos e organizamos suas finanças para você conquistar a liberdade financeira, porém sem promessas milagrosas — tudo é feito dentro da legalidade e com base em princípios sólidos de gestão de risco, proteção de capital e diversificação.</p>
+          <p>O objetivo é fazer o dinheiro trabalhar por você, com consistência e segurança.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Onde movimento meu dinheiro?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Toda e qualquer movimentação e decisão é feita somente pelo cliente. Atuamos apenas com planejamento e orientação — sem gestão de recursos e sem conflito de interesses, conforme a Instrução CVM 592.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Não tenho muito dinheiro para investir. É pra mim?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Justamente por isso você precisa começar. Nosso planejamento é escalável — você começa com o que tem e evolui com consistência. O segredo não está em quanto você começa, mas em como você se organiza e avança.</p>
+          <p>O importante é dar o primeiro passo. Ficar parado é o que mais custa caro no longo prazo.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Quais tipos de investimentos são orientados?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Em nosso planejamento orientamos o cliente com possibilidades em Renda Fixa (Tesouro Direto, CDBs, LCI/LCA, Debêntures, CRI/CRA), Renda Variável (ações, FIIs, ETFs), Derivativos e outros instrumentos. Tudo seguindo o perfil e os objetivos do cliente.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Tenho medo de perder dinheiro. Como funciona?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Esse medo é natural, e é exatamente por isso que nossa consultoria existe. Você aprenderá a investir com segurança e estratégia, respeitando seu perfil e objetivos.</p>
+          <p>Nada de apostas ou "dicas quentes". Tudo é construído sobre princípios sólidos de gestão de risco, proteção de capital e diversificação inteligente.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Posso cancelar quando quiser?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim. Quando quiser, é só solicitar. Não existe fidelidade forçada — nossa proposta é que você continue porque enxerga valor real no serviço, não por contrato.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Por que confiar na EA Abreu?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Somos regulados pela CVM (Comissão de Valores Mobiliários), com registro ativo nos termos da Instrução 592. Isso significa que atuamos dentro da lei, com responsabilidade técnica e sem conflito de interesses.</p>
+          <p>Além disso, nosso consultor tem mais de 20 anos de experiência no mercado financeiro, passagem por Itaú Unibanco e Santander, MBA pela FGV e certificação CEA (Anbima).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ───────────────────────────── -->
+<section class="final-cta">
+  <h2>Dê o primeiro passo para a sua<br/><em>liberdade financeira.</em></h2>
+  <p>Diagnóstico gratuito, sem compromisso e com quem é regulado pela CVM.</p>
+  <a href="#diagnostico" class="btn-gold">🎯 Solicitar diagnóstico gratuito</a>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────── -->
+<footer>
+  <div class="footer-brand">EA Abreu · Construção de Patrimônio</div>
+  <div class="footer-links">
+    <a href="mailto:evanildoabreu@gmail.com">✉️ evanildoabreu@gmail.com</a>
+    <a href="https://www.linkedin.com/in/evanildoabreu/" target="_blank">🔗 LinkedIn</a>
+  </div>
+  <p class="footer-note">
+    © 2026 EA Abreu · Consultoria Financeira registrada na CVM · Instrução CVM 592 ·
+    CNPJ: a definir · Todos os direitos reservados.<br/>
+    Este site não configura oferta de valores mobiliários. O consultor não realiza gestão de recursos de terceiros.
+  </p>
+</footer>
+
+<script>
+  // ── FAQ accordion ──────────────────────
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ── Form success ───────────────────────
+  const form = document.getElementById('lead-form');
+  const successDiv = document.getElementById('form-success');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const action = form.getAttribute('action');
+
+    // Se ainda não configurou o Formspree, mostra aviso
+    if (action.includes('YOUR_FORM_ID')) {
+      alert('⚠️ Configure o Formspree: substitua YOUR_FORM_ID no código HTML pelo ID do seu formulário em formspree.io');
+      return;
+    }
+
+    try {
+      const res = await fetch(action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        successDiv.style.display = 'block';
+      } else {
+        alert('Erro ao enviar. Tente novamente ou nos contate diretamente.');
+      }
+    } catch {
+      alert('Erro de conexão. Verifique sua internet e tente novamente.');
+    }
+  });
+
+  // ── Nav shadow on scroll ───────────────
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow =
+      window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,.4)' : 'none';
+  });
+
+  // ── PHOTO SETUP PANEL ─────────────────
+  const slots = [
+    { id: 'slot-main',   label: '📸 Foto principal (B3)',         hint: 'Foto de você na B3 — foto principal do site',    imgEl: 'slot-main-img',   phEl: 'slot-main-ph' },
+    { id: 'slot-badge',  label: '📸 Foto secundária (badge)',      hint: 'Aparece sobreposta à foto principal',             imgEl: 'slot-badge-img',  phEl: 'slot-badge-ph' },
+    { id: 'slot-award',  label: '🏆 Prêmio Itaú (1° lugar)',      hint: 'Foto da cerimônia de premiação',                  imgEl: 'slot-award-img',  phEl: 'slot-award-ph' },
+    { id: 'slot-team',   label: '👥 Foto de equipe',              hint: 'Foto com sua equipe para a seção de liderança',   imgEl: 'slot-team-img',   phEl: 'slot-team-ph' },
+  ];
+
+  function readFile(file, cb) {
+    const reader = new FileReader();
+    reader.onload = e => cb(e.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  function applyPhoto(slotId, dataUrl) {
+    const imgEl = document.getElementById(slotId + '-img');
+    const phEl  = document.getElementById(slotId + '-ph');
+    if (imgEl) { imgEl.src = dataUrl; imgEl.style.display = 'block'; }
+    if (phEl)  { phEl.style.display = 'none'; }
+    // update slot thumb in panel
+    const thumb = document.querySelector(`#thumb-${slotId} img`);
+    if (thumb) thumb.src = dataUrl;
+    const slotEl = document.getElementById(`panel-slot-${slotId}`);
+    if (slotEl) slotEl.classList.add('done');
+    // persist
+    try { localStorage.setItem('ea_photo_' + slotId, dataUrl); } catch(e){}
+  }
+
+  // Restore saved photos on load
+  slots.forEach(s => {
+    try {
+      const saved = localStorage.getItem('ea_photo_' + s.id);
+      if (saved) applyPhoto(s.id, saved);
+    } catch(e){}
+  });
+
+  // Build modal HTML
+  const modal = document.createElement('div');
+  modal.id = 'setup-modal';
+  modal.innerHTML = `
+    <div class="setup-box">
+      <button class="setup-close" id="setup-close-btn">✕</button>
+      <h3>⚙️ Configurar Fotos</h3>
+      <p>Selecione cada foto do seu computador. Elas ficam salvas automaticamente no navegador.</p>
+      ${slots.map(s => `
+        <div class="photo-slot" id="panel-slot-${s.id}" onclick="document.getElementById('file-${s.id}').click()">
+          <div class="slot-thumb" id="thumb-${s.id}">
+            <img src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:6px"/>
+            <span id="thumb-icon-${s.id}">📷</span>
+          </div>
+          <div class="slot-info">
+            <div class="slot-label">${s.label}</div>
+            <div class="slot-hint">${s.hint}</div>
+          </div>
+          <span class="slot-check" id="check-${s.id}"></span>
+          <input type="file" id="file-${s.id}" accept="image/*" style="display:none"/>
+        </div>
+      `).join('')}
+      <button class="setup-download" id="download-btn">⬇️ Baixar HTML com fotos incorporadas</button>
+      <p class="setup-note">As fotos ficam salvas no navegador mesmo após fechar a página.<br/>Use "Baixar" para gerar um arquivo HTML completo e independente.</p>
+    </div>`;
+  document.body.appendChild(modal);
+
+  // Setup button
+  const setupBtn = document.createElement('button');
+  setupBtn.id = 'setup-btn';
+  setupBtn.innerHTML = '⚙️ Fotos';
+  document.body.appendChild(setupBtn);
+
+  setupBtn.onclick = () => modal.classList.add('open');
+  document.getElementById('setup-close-btn').onclick = () => modal.classList.remove('open');
+  modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('open'); });
+
+  // File inputs
+  slots.forEach(s => {
+    const input = document.getElementById('file-' + s.id);
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      readFile(file, dataUrl => {
+        applyPhoto(s.id, dataUrl);
+        // update thumb icon visibility
+        const icon = document.getElementById('thumb-icon-' + s.id);
+        const img  = document.querySelector(`#thumb-${s.id} img`);
+        if (icon) icon.style.display = 'none';
+        if (img)  { img.src = dataUrl; img.style.display = 'block'; }
+        const check = document.getElementById('check-' + s.id);
+        if (check) check.textContent = '✅';
+      });
+    });
+  });
+
+  // Download HTML with embedded photos
+  document.getElementById('download-btn').addEventListener('click', () => {
+    let html = document.documentElement.outerHTML;
+    // strip setup button and modal from downloaded version
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    ['setup-btn','setup-modal'].forEach(id => {
+      const el = doc.getElementById(id);
+      if (el) el.remove();
+    });
+    const blob = new Blob([doc.documentElement.outerHTML], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ea-abreu-landing.html';
+    a.click();
+  });
+</script>
+</body>
+</html>
