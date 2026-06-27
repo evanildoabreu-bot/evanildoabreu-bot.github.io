@@ -1101,8 +1101,7 @@
         headers: { 'Accept': 'application/json' }
       });
       if (res.ok) {
-        form.style.display = 'none';
-        successDiv.style.display = 'block';
+        window.location.href = 'obrigado.html';
       } else {
         alert('Erro ao enviar. Tente novamente ou nos contate diretamente.');
       }
